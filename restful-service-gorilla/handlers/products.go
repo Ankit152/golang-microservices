@@ -3,8 +3,10 @@ package handlers
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/Ankit152/golang-microservices/restful-service-gorilla/data"
+	"github.com/gorilla/mux"
 )
 
 type Products struct {
@@ -41,24 +43,30 @@ func (p *Products) AddProduct(w http.ResponseWriter, r *http.Request) {
 	data.AddProduct(prod)
 }
 
-func (p Products) UpdateProducts(id int, rw http.ResponseWriter, r *http.Request) {
+func (p *Products) UpdateProducts(w http.ResponseWriter, r *http.Request) {
 	p.l.Println("Handle PUT Product")
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, "Unable to convert id", http.StatusBadRequest)
+		return
+	}
 
 	prod := &data.Product{}
 
-	err := prod.FromJSON(r.Body)
+	err = prod.FromJSON(r.Body)
 	if err != nil {
-		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
 	}
 
 	err = data.UpdateProduct(id, prod)
 	if err == data.ErrProductNotFound {
-		http.Error(rw, "Product not found", http.StatusNotFound)
+		http.Error(w, "Product not found", http.StatusNotFound)
 		return
 	}
 
 	if err != nil {
-		http.Error(rw, "Product not found", http.StatusInternalServerError)
+		http.Error(w, "Product not found", http.StatusInternalServerError)
 		return
 	}
 }

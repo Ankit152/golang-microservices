@@ -83,24 +83,24 @@ func (p *Products) addProduct(w http.ResponseWriter, r *http.Request) {
 	data.AddProduct(prod)
 }
 
-func (p Products) updateProducts(id int, rw http.ResponseWriter, r *http.Request) {
+func (p Products) updateProducts(id int, w http.ResponseWriter, r *http.Request) {
 	p.l.Println("Handle PUT Product")
 
 	prod := &data.Product{}
 
 	err := prod.FromJSON(r.Body)
 	if err != nil {
-		http.Error(rw, "Unable to unmarshal json", http.StatusBadRequest)
+		http.Error(w, "Unable to unmarshal json", http.StatusBadRequest)
 	}
 
 	err = data.UpdateProduct(id, prod)
 	if err == data.ErrProductNotFound {
-		http.Error(rw, "Product not found", http.StatusNotFound)
+		http.Error(w, "Product not found", http.StatusNotFound)
 		return
 	}
 
 	if err != nil {
-		http.Error(rw, "Product not found", http.StatusInternalServerError)
+		http.Error(w, "Product not found", http.StatusInternalServerError)
 		return
 	}
 }
