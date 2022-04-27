@@ -8,11 +8,11 @@ import (
 )
 
 type Currency struct {
-	pb protos.UnimplementedCurrencyServer
+	protos.UnimplementedCurrencyServer
 }
 
-func NewCurrency(pb protos.UnimplementedCurrencyServer) *Currency {
-	return &Currency{pb}
+func NewCurrency() *Currency {
+	return &Currency{}
 }
 
 func (c *Currency) GetRate(ctx context.Context, rr *protos.RateRequest) (*protos.RateResponse, error) {
