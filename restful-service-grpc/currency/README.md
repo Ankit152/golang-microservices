@@ -25,6 +25,10 @@ Link to the repo is [here!](https://github.com/fullstorydev/grpcurl)
 
 ```go install github.com/fullstorydev/grpcurl/cmd/grpcurl```
 
+### Run the server
+* Command:
+    ```go run main.go```
+
 ### List Services
 * Command: 
     ```grpcurl --plaintext localhost:8080 list```
